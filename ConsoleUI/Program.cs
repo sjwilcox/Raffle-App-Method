@@ -7,18 +7,92 @@ using System.Threading.Tasks;
 
 namespace ConsoleUI
 {
+    
+    
     class Program
     {
+        
         static void Main(string[] args)
         {
 
+            List<string> guestList = GetUserInfo();
+            MultiLineAnimation();
+            foreach (string guest in guestList)
+            {
+                GenerateRandomNumber(min, max);
+                AddGuestsRaffle(raffleNumber, guest);
+            }
+
+            PrintWinner();
+
+            Console.ReadLine();
 
         }
 
         //Start writing your code here
+        private static Dictionary<int, string> raffleDict = new Dictionary<int, string>();
+        private static int min = 1000;
+        private static int max = 9999;
+        private static int raffleNumber;
+        private static Random _rdm = new Random();
 
+        public static string GetUserInput(string message)
+        {
+            Console.WriteLine(message);
+            string guest = Console.ReadLine();
+            return guest;
+        }
 
+        
+        public static List<string> GetUserInfo()
+        {
+            List<string> guests = new List<string>();
+            string otherGuest;
+            do
+            {
+                string name = GetUserInput("Please enter a name: ");
+                guests.Add(name);
+                otherGuest = GetUserInput("Do you want to add another name? ");
+                
 
+            } while (otherGuest == "yes");
+            return guests;
+        }
+
+        public static int GenerateRandomNumber(int min, int max)
+        {
+            
+            raffleNumber = _rdm.Next(min, max);
+            return raffleNumber;
+        }
+
+        public static string AddGuestsRaffle(int raffleNumber, string guest) 
+        {
+            
+            raffleDict.Add(raffleNumber, guest);
+            return null;
+        }
+        public static void PrintGuestName()
+        {
+            foreach (KeyValuePair<int, string> rafName in raffleDict)
+            {
+                Console.WriteLine($"{rafName.Value} {rafName.Key}");
+            }
+        }
+
+        private static int GetRaffleNumber(Dictionary<int, string> people)
+        {
+            int index = _rdm.Next(people.Count);
+            KeyValuePair<int, string> pair = people.ElementAt(index);
+            int winner = pair.Key;
+            return winner;
+        }
+
+        public static void PrintWinner()
+        {
+            int winnerNumber = GetRaffleNumber(raffleDict);
+            Console.WriteLine($"the winner is {raffleDict[winnerNumber]} with the #{winnerNumber}");
+        }
 
 
 
